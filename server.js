@@ -30,19 +30,24 @@ app.get("/", function(req,res){
   axios.get("https://www.nytimes.com/section/us").then(function(response){
     var $ = cheerio.load(response.data);
 
-    $('article a').each(function(i, element){
+    $('li article h2').each(function(i, element){
       var result = {};
 
-      result.title = $(this).children("h2").text();
-      result.summary = $(this).children('p.summary').text();
+      result.title = $(this).text();
+      // result.summary = $(this).children('p.summary').text();
+
+      // console.log('Thisdata>>>', result.title);
 
       db.Article.create(result).then(function(dbData){
-        res.send("Added 20 new articles!");
+        alert("Added 20 new articles!");
+        res.send(result.title);
         // TODO for frontend add a modal showing 20 article here
       }).catch(function(err){
         res.json(err);
       });
     });
+  }).catch(function (error) {
+    console.log(error);
   });
 });
 
