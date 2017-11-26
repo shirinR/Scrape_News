@@ -1,20 +1,21 @@
-var express = require('express');
+var express = require("express");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+
 var axios = require("axios");
 var cheerio = require("cheerio");
 
 var db = require("./models");
 
-var port = process.env.PORT || 3000;
+var PORT = 3000;
 
 var app = express();
-app.use(logger("dev"));
 
+app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
-// Set Handlebars.
+
 var exphbs = require("express-handlebars");
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
@@ -29,10 +30,11 @@ app.get("/", function(req,res){
   axios.get("https://www.nytimes.com/section/us").then(function(response){
     var $ = cheerio.load(response.data);
 
-    $('h2.headline').each(function(i, element){
+    $('article a').each(function(i, element){
       var result = {};
 
-      result.title = $(this).children("a").text().attr('href');
+      result.title = $(this).children("h2").text();
+      result.summary = $(this).children('p.summary').text();
 
       db.Article.create(result).then(function(dbData){
         res.send("Added 20 new articles!");
