@@ -1,5 +1,5 @@
 .container{
-  background-color: #e5e500;
+  background-color: #989898;
 }
 
 #article_img{
@@ -10,12 +10,13 @@
 
 #article_bar{
   position: inline;
-  background-color: pink;
   border: 1px solid black;
 }
 
 #pages{
   padding: 10px;
+  color: white;
+  font-size: 17px;
 }
 
 .navbar{
@@ -24,4 +25,8 @@
 
 #modal_text{
   text-align: center;
+}
+
+.article_jumbo{
+  font-family: georgia;
 }

@@ -24,6 +24,7 @@ app.set("view engine", "handlebars");
 
 // MongoDB
 mongoose.Promise = Promise;
+// MONGOLAB_ONYX_URI = mongodb://heroku_6bn2xz2b:''@ds117336.mlab.com:17336/heroku_6bn2xz2b
 var MONGODB_URI = process.env.MONGOLAB_ONYX_URI  || "mongodb://localhost/mongoHeadlines";
 mongoose.connect(MONGODB_URI, {
   useMongoClient: true

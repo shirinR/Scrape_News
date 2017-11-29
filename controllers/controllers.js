@@ -11,9 +11,7 @@ router.get('/', function(req, res){
 router.get("/scrape", function(req, res){
   axios.get("https://www.nytimes.com/section/us").then(function(response){
     var $ = cheerio.load(response.data);
-
     let results = [];
-
     $('article h2').each(function(i, element){
       var title = $(element).text();
 
@@ -27,8 +25,16 @@ router.get("/scrape", function(req, res){
   });
 });
 
-router.get("/saved", function(req,res){
-  // TODO: db.Article.findOne({ _id: })
+router.post("/save", function(req,res){
+  console.log("here body >>>> ", req.body);
+});
+
+router.get("/save", function(req,res){
+  // TODO: Article.findAll({ _id: })
+  Article.findALl({}, function(err, data){
+    if(err) throw err;
+
+  });
 });
 
 
