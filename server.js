@@ -8,52 +8,29 @@ var cheerio = require("cheerio");
 
 var db = require("./models");
 
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 
 var app = express();
 
+// Configure middleware
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
 
+// handlebars
 var exphbs = require("express-handlebars");
-
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
+// MongoDB
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/week18Populater", {
+var MONGODB_URI = process.env.MONGOLAB_ONYX_URI  || "mongodb://localhost/mongoHeadlines";
+mongoose.connect(MONGODB_URI, {
   useMongoClient: true
 });
 
-app.get("/", function(req,res){
-  axios.get("https://www.nytimes.com/section/us").then(function(response){
-    var $ = cheerio.load(response.data);
-
-    $('li article h2').each(function(i, element){
-      var result = {};
-
-      result.title = $(this).text();
-      // result.summary = $(this).children('p.summary').text();
-
-      // console.log('Thisdata>>>', result.title);
-
-      db.Article.create(result).then(function(dbData){
-        alert("Added 20 new articles!");
-        res.send(result.title);
-        // TODO for frontend add a modal showing 20 article here
-      }).catch(function(err){
-        res.json(err);
-      });
-    });
-  }).catch(function (error) {
-    console.log(error);
-  });
-});
-
-app.get("/saved", function(req,res){
-  // TODO: db.Article.findOne({ _id: })
-});
+var routes = require("./controllers/controllers.js");
+app.use("/", routes);
 
 app.listen(PORT, function() {
   console.log("App running on port " + PORT + "!");

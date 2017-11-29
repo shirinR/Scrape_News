@@ -6,24 +6,24 @@ console.log('/////////////////////////APP js');
 // });
 
 $(document).on("click", "#scraping", function(){
-  alert('Added 20 new articles!');
 
   $.ajax({
     method: "GET",
-    url: "/"
+    url: "/scrape"
   }).done(function(data){
-    // console.log('/////DATA js', data);
+    console.log('data js >>>', data);
 
-    for (const i of data.length) {
+    data.forEach((element) => {
+      $('#article_bar').append("<div class='jumbotron'><p>" + element.title + "<span> </span><button data-id='" + data._id + "'id='savearticle'>Save Article</button></p></div>");
+
+       $('#myModal').modal();
+    });
       // <div class="jumbotron">
       //  <h1>data.title</h1>
       // </div>
       // <p>this.summary</p>
       // <p>this.link</p>
-
-      $('#status_bar').append("<p>" + data.title + "<button data-id='" + data._id + "'id='savearticle'>Save Article</button></p>");
-    }
-
+    // }
   });
 });
 
@@ -35,7 +35,7 @@ $(document).on('click', '#savearticle', function(){
     method: "POST",
     url: "/saved/" + thisId,
     data: {
-      
+
     }
   })
 });
